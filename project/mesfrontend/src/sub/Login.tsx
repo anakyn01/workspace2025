@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import * as S from "../styled/Login.styles";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const Login = () => {
   // 초기화
@@ -53,91 +54,67 @@ const Login = () => {
 
   return (
     <>
-      <Container>
-        <div className="row justify-content-center">
-          <div className="col-xl-10 col-lg-12 col-md-9">
-            <div className="card o-hidden border-0 shadow-lg mt-200 ">
-              <div className="card-body p-0">
-                <div className="row">
-                  <div className="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                  <div className="col-lg-6">
-                    <div className="p-5">
-                      <div className="text-center">
-                        <h1 className="h4 text-gray-900 mb-4">Welcome Back!</h1>
-                      </div>
+    <S.Wrapper>
+      <S.Card>
+          <S.LeftImage/>
+          <S.Right>
+            <S.Title>Welcome Back!</S.Title>
 
-                      <form className="user" onSubmit={handleSubmit}>
-                        <div className="form-group">
-                          <input
+             <S.Form onSubmit={handleSubmit}>
+
+                        <S.Input
                             type="email"
-                            className="form-control form-control-user"
-                            id="exampleInputEmail"
-                            aria-describedby="emailHelp"
                             placeholder="Enter Email Address..."
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                           />
-                        </div>
 
-                        <div className="form-group">
-                          <input
+                          <S.Input
                             type="password"
-                            className="form-control form-control-user"
-                            id="exampleInputPassword"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                           />
-                        </div>
 
-                        <div className="form-group">
-                          <div className="custom-control custom-checkbox small">
+                          <S.CheckboxWrapper>
                             <input
                               type="checkbox"
-                              className="custom-control-input mx-2"
-                              id="customCheck"
-                            />
-                            <label className="custom-control-label" htmlFor="customCheck">
+                              id="remember"
+                            />{" "}
+                            <label htmlFor="remember">
                               Remember Me
                             </label>
-                          </div>
-                        </div>
+                          </S.CheckboxWrapper>
 
-                        <button type="submit" className="btn btn-primary btn-user btn-block">
+                        <S.Button type="submit">
                           Login
-                        </button>
+                        </S.Button>
 
-                        <hr />
+                        <S.Divider/>
+                          <S.SocialButton variant="google">
+                            <i className="fab fa-google"/>
+                            Login with Google
+                          </S.SocialButton>
+                          
+                          <S.SocialButton variant="facebook">
+                            <i className="fab fa-facebook-f"/>
+                            Login with Facebook
+                          </S.SocialButton>
 
-                        <div className="mb-2">
-                          <a href="#" className="btn btn-google btn-user btn-block">
-                            <i className="fab fa-google fa-fw"></i> Login with Google
-                          </a>
-                        </div>
-                        <a href="#" className="btn btn-facebook btn-user btn-block">
-                          <i className="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                        </a>
-                      </form>
+                          <S.SocialButton variant="instagram">
+                            <i className="fab fa-instagram"/>
+                            Login with Instagram
+                          </S.SocialButton>
 
-                      <hr />
-                      <div className="text-center">
-                        <a className="small" href="/forgot">
-                          Forgot Password?
-                        </a>
-                      </div>
-                      <div className="text-center">
-                        <a className="small" href="/member">
-                          Create an Account!
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Container>
+                          
+                      </S.Form>
+
+                      <S.Divider/>
+                      <S.LinkText href="/forgot">Forgot Password?</S.LinkText>
+                      <S.LinkText href="/member">Create an Account!</S.LinkText>
+          </S.Right>
+      </S.Card>
+    </S.Wrapper>
     </>
   );
 };

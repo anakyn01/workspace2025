@@ -1,7 +1,24 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import axios from "axios";
-import { Container, Row, Col, Button, Form, Card } from "react-bootstrap";
+import { Row, Col, Form,} from "react-bootstrap";
+import {
+  PageContainer, 
+  StyledCard, 
+  LeftImage, 
+  FormWrapper, 
+  GenderLabel, 
+  AddressGroup, 
+  AddressButton, 
+  SubmitButton, 
+  SocialButton,
+  FooterLinks,
+  FooterLink,
+} from "../styled/Member.styles";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import{
+  faGoogle, faInstagram, faFacebookF,
+}from "@fortawesome/free-brands-svg-icons";
 
 //다음 api관련
 declare global{
@@ -28,6 +45,8 @@ interface MemberForm{
   detailAddress:string;
 }
 
+const BACKEND_BASE_URL = "http://localhost:9500";
+
 const Member = () => {
   //초기화
   const [form, setForm] = useState<MemberForm>({
@@ -44,21 +63,28 @@ const Member = () => {
   detailAddress:"",
   });
 
+   //카카오 회원가입(소셜 로그인)버튼 클릭시
+ const handleGoogleSignup = () => {
+  window.location.href=`${BACKEND_BASE_URL}/oauth2/authorization/google`;
+ };
 
-  //여기서 부터 추가됨
-//백앤드 기본주소 
-const BACKEND_BASE_URL = "http://localhost:9500";
- //여기에 추가된게 끝남
+   //인스타 회원가입(소셜 로그인)버튼 클릭시
+ const handleInstaSignup = () => {
+  window.location.href=`${BACKEND_BASE_URL}/oauth2/authorization/instagram`;
+ };
+
+//페이스북 (소셜 로그인)버튼 클릭시
+ const handleFacebookSignup = () => {
+  window.location.href=`${BACKEND_BASE_URL}/oauth2/authorization/facebook`;
+ };
+
 
  //카카오 회원가입(소셜 로그인)버튼 클릭시
  const handleKakaoSignup = () => {
   window.location.href=`${BACKEND_BASE_URL}/oauth2/authorization/kakao`;
  };
 
-  //인스타 회원가입(소셜 로그인)버튼 클릭시
- const handleInstaSignup = () => {
-  window.location.href=`${BACKEND_BASE_URL}/oauth2/authorization/instagram`;
- };
+
 
 
   //공통 입력값 변경 함수
@@ -135,27 +161,30 @@ setTimeout(() => {
    }
   
 return (
-    <Container className="mt-5">
+    <PageContainer>
       <script
         src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
         async
       ></script>
 
-      <Card className="o-hidden border-0 shadow-lg mt-150">
-        <Card.Body className="p-0">
+      <StyledCard>
+        <StyledCard.Body className="p-0">
           <Row>
-            <div className="col-lg-5 d-none d-lg-block bg-register-image"></div>
-            <div className="col-lg-7">
-              <div className="p-5">
-                <div className="text-center">
-                  <h1 className="h4 text-gray-900 mb-4">Create an Account!</h1>
-                </div>
-                <Form className="user" onSubmit={handleSubmit}>
-                  <div className="form-group row mb-2">
-                    <Col sm={6} className="mb-3 mb-sm-0">
+            <Col lg={5} className="d-none d-lg-block p-0">
+              <LeftImage/>
+            </Col>
+            <Col lg={7}>
+              <FormWrapper>
+
+                  <h1 className="h4 text-gray-900 mb-4">
+                    Create an Account!
+                  </h1>
+
+                <Form onSubmit={handleSubmit}>
+                  <Row className="mb-2">
+                    <Col sm={6}>
                       <Form.Control
                         type="text"
-                        className="form-control-user"
                         placeholder="이름"
                         name="firstName"
                         value={form.firstName}
@@ -165,27 +194,26 @@ return (
                     <Col sm={6}>
                       <Form.Control
                         type="text"
-                        className="form-control-user"
                         placeholder="성"
                         name="lastName"
                         value={form.lastName}
                         onChange={handleChange}
                       />
                     </Col>
-                  </div>
+                  </Row>
 
-                  <div className="form-group mb-2">
+      
                     <Form.Control
                       type="email"
-                      className="form-control-user"
+                      className="mb-2"
                       placeholder="이메일"
                       name="email"
                       value={form.email}
                       onChange={handleChange}
                     />
-                  </div>
+         
 
-                  <div className="form-group row mb-2">
+                  <Row className="mb-2">
                     <Col sm={6} className="mb-3 mb-sm-0">
                       <Form.Control
                         type="password"
@@ -199,18 +227,17 @@ return (
                     <Col>
                       <Form.Control
                         type="password"
-                        className="form-control-user"
                         placeholder="비밀번호 확인"
                         name="repeatPassword"
                         value={form.repeatPassword}
                         onChange={handleChange}
                       />
                     </Col>
-                  </div>
+                  </Row>
 
                   {/* 성별 추가 */}
-                  <div className="form-group mb-2">
-                    <label className="mr-3 form-label mx-2">성별 : </label>
+                  <div className="mb-3">
+                    <GenderLabel>성별 : </GenderLabel>
                     <Form.Check
                       inline
                       type="radio"
@@ -269,75 +296,91 @@ return (
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <div className="d-flex btn-group br50">
+                  <AddressGroup>
                       <Form.Control
                         type="text"
-                        className="form-control w-75"
                         name="address"
                         readOnly
                         value={form.address}
+                        className="form-control-user"
                       />
-                      <button
+                      <AddressButton
                       type="button"
-                      className="btn btn-secondary w-25"
                       onClick={handleAddressSearch}
                       >
                         주소검색
-                      </button>
-                    </div>
-                    <div className="">
+                      </AddressButton>
+                    </AddressGroup>
                       <Form.Control
                         type="text"
-                        className="form-control-user w-100 mt-3"
                         placeholder="상세주소"
                         name="detailAddress"
+                        className="form-control-user"
                         value={form.detailAddress}
                         onChange={handleChange}
                       />
-                    </div>
-                  </div>
 
-                  <Button
+                  <SubmitButton
                     type="submit"
-                    variant="primary"
-                    className="btn-user btn-block mb-2"
                   >
                     회원가입
-                  </Button>
+                  </SubmitButton>
                 </Form>
                 <hr />
+<SocialButton
+href= "/" 
+bg="#db4437"
+onClick={handleGoogleSignup}
+>
+<FontAwesomeIcon icon={faGoogle}/>
+Register with Google
+</SocialButton>
 
-<a href= "/" 
-className="btn btn-google btn-user btn-block mb-2"
+
+<SocialButton
+href= "/" 
+bg="#E1306c"
 onClick={handleInstaSignup}
 >
-<i className=""></i>Register with Insta
-</a>
+<FontAwesomeIcon icon={faInstagram}/>
+Register with Insta
+</SocialButton>
 
-<a href= "/" 
-className="btn btn-facebook btn-user btn-block mb-2"
-onClick={handleKakaoSignup}
+<SocialButton
+href= "/" 
+bg="#1877f2"
+onClick={handleFacebookSignup}
 >
-<i className=""></i>Register with Kakao
-</a>
+<FontAwesomeIcon icon={faFacebookF}/>
+Register with Facebook
+</SocialButton>
 
-                <div className="text-center mb-2">
-                  <a href="/forgot" className="small">
-                    Forgot password?
-                  </a>
-                </div>
-                <div className="text-center">
-                  <a href="/login" className="small">
-                    Already have an account? Login!
-                  </a>
-                </div>
-              </div>
-            </div>
-          </Row>
-        </Card.Body>
-      </Card>
-    </Container>
+<SocialButton 
+href= "/" 
+bg="#fee500"
+onClick={handleKakaoSignup}
+style={{color:"#000"}}
+>
+Register with Kakao
+</SocialButton>
+
+<FooterLinks>
+  <FooterLink href="/forgot">
+    Forgot password?
+  </FooterLink>
+</FooterLinks>
+<FooterLinks>
+  <FooterLink href="/login">
+    Already have an account? Login!
+  </FooterLink>
+</FooterLinks>
+
+</FormWrapper>
+</Col>
+</Row>
+</StyledCard.Body>
+</StyledCard>
+</PageContainer>
   );
 };
 
